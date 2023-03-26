@@ -1,0 +1,21 @@
+options:
+	moblist: villager or sheep or creeper or cow or pig or horse or skeleton or baby villager
+	blacklist: wither or ender dragon
+
+command /mobcatcher [<player>]:
+	permission: mobcatcher.admin
+	trigger:
+		give player snowball named "&c&lMob Catcher"
+
+on right click on {@moblist}:
+	if player's tool is a snowball named "&c&lMob Catcher":
+		if entity is not {@blacklist}:
+			give snowball named "&c&lMob Ball" with lore "%entity%" to player
+			kill entity
+			
+on right click using a snowball:
+	if the name of player's tool is "&c&lMob Ball":
+		set {_entity} to the 1st line of event-item's lore parsed as entity type
+		broadcast {_entity}
+		spawn {_entity} at player's location
+		give player snowball named "&c&lMob Catcher"
