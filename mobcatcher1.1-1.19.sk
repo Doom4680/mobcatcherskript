@@ -1,0 +1,37 @@
+options:
+	moblist: villager or sheep or creeper or cow or pig or horse or skeleton or baby villager
+	blacklist: wither or ender dragon
+
+#Crafting Recipe
+on load:
+	set {_mobcatcher} to snowball named "&c&lMob Catcher"
+	register new shaped recipe for {_mobcatcher} using iron ingot, chain, iron ingot, chain, redstone, chain, iron ingot, chain, and iron ingot with id "mob-catcher"
+
+#Give Command
+
+command /mobcatcher [<player>]:
+	permission: mobcatcher.admin
+	trigger:
+		give player snowball named "&c&lMob Catcher"
+
+#Disable Snowballs So Entity Doesn't Get Hurt
+
+on projectile shoot:
+	if projectile is a snowball:
+		delete projectile
+
+#Main Function
+
+on right click on {@moblist}:
+	if player's tool is a snowball named "&c&lMob Catcher":
+		if entity is not {@blacklist}:
+			give glowing snowball named "&c&lMob Ball" with lore "%entity%" to player
+			remove 1 snowball named "&c&lMob Catcher" from player's inventory
+			delete entity
+			
+on right click using a snowball:
+	if the name of player's tool is "&c&lMob Ball":
+		set {_entity} to the 1st line of event-item's lore parsed as entity type
+		spawn {_entity} at player's location
+		remove 1 snowball named "&c&lMob Ball" from player's inventory
+		give player snowball named "&c&lMob Catcher"
